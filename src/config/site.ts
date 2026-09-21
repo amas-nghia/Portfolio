@@ -17,8 +17,8 @@ export const siteConfig = {
       "game prototyping",
       "freelance game developer",
     ],
-    openGraphImage: "/images/project-mobile-puzzle.webp",
-    openGraphImageAlt: "Colorful Unity mobile puzzle prototype by AMAS",
+    openGraphImage: "/images/world/mekong-background.webp",
+    openGraphImageAlt: "Stylized Mekong landscape from the AMAS Unity developer portfolio",
   },
   nav: [
     { label: "Work", href: "#work" },
@@ -28,16 +28,24 @@ export const siteConfig = {
   ],
   hero: {
     eyebrow: "Unity Developer · Game Prototyper",
-    title: "I make small worlds feel alive.",
+    title: "Walk through the worlds I build.",
     description:
-      "From playful mechanics to polished mobile and WebGL builds — designed to be tested, understood and enjoyed.",
-    primaryAction: { label: "Explore projects", href: "#work" },
+      "Mobile puzzles, strange streets and playful prototypes — built to be tested, understood and enjoyed.",
+    primaryAction: { label: "Start the journey", href: "#work" },
     secondaryAction: {
       label: "Open game demos",
       href: "https://amasi.itch.io/",
     },
     image: "/images/hero-workspace.webp",
     facts: ["~3 years Unity / C#", "5 recent mobile puzzle builds"],
+  },
+  world: {
+    background: "/images/world/mekong-background.webp",
+    midground: "/images/world/mekong-midground.webp",
+    foreground: "/images/world/mekong-foreground.webp",
+    characterModel: "/models/amas-walking.glb",
+    groundModel: "/models/mekong-path.glb",
+    interactionHint: "Scroll to walk",
   },
   projects: [
     {

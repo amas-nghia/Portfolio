@@ -1,10 +1,6 @@
 import { SiteHeader } from "@/components/layout/site-header";
 import { PageMotion } from "@/components/motion/page-motion";
-import { AboutSection } from "@/components/sections/about-section";
-import { ContactSection } from "@/components/sections/contact-section";
-import { HeroSection } from "@/components/sections/hero-section";
-import { ProcessSection } from "@/components/sections/process-section";
-import { WorkSection } from "@/components/sections/work-section";
+import { WorldJourney } from "@/components/world/world-journey";
 import { siteConfig } from "@/config/site";
 import { getSiteUrl } from "@/lib/site-url";
 
@@ -34,12 +30,8 @@ export default function HomePage() {
       />
       <SiteHeader />
       <main>
-        <HeroSection />
-        <WorkSection />
-        <ProcessSection />
-        <AboutSection />
+        <WorldJourney />
       </main>
-      <ContactSection />
       <PageMotion />
     </>
   );

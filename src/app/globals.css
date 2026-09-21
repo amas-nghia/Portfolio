@@ -152,6 +152,436 @@ button {
   background-color: color-mix(in oklab, var(--night) 38%, transparent);
 }
 
+.world-scroll {
+  --world-header-height: 5rem;
+  position: relative;
+  height: 500svh;
+  background: var(--background);
+}
+
+.world-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.world-anchor {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  scroll-margin-top: var(--world-header-height);
+}
+
+.world-anchor-work {
+  top: 100svh;
+}
+
+.world-anchor-process {
+  top: 200svh;
+}
+
+.world-anchor-about {
+  top: 300svh;
+}
+
+.world-anchor-contact {
+  top: 400svh;
+}
+
+.world-visuals,
+.world-chapters,
+.world-chapter {
+  position: absolute;
+  inset: 0;
+}
+
+.world-visuals {
+  z-index: 0;
+  overflow: hidden;
+  background: var(--background);
+}
+
+.world-layer {
+  pointer-events: none;
+  user-select: none;
+}
+
+.world-layer-far {
+  z-index: 0;
+  object-fit: cover;
+  object-position: center;
+  scale: 1.035;
+}
+
+.world-layer-middle {
+  z-index: 2;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+.world-layer-foreground {
+  z-index: 4;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+.world-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.world-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.world-loading {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 6.5rem;
+  color: color-mix(in oklab, var(--foreground) 62%, transparent);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.world-chapters {
+  z-index: 6;
+  pointer-events: none;
+}
+
+.world-chapter {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.world-chapter:first-child {
+  visibility: visible;
+  opacity: 1;
+}
+
+.world-chapter[data-active] {
+  pointer-events: auto;
+}
+
+.world-chapter-inner {
+  display: flex;
+  min-height: 100%;
+  align-items: center;
+  padding-top: calc(var(--world-header-height) + 2rem);
+  padding-bottom: 8rem;
+}
+
+.world-chapter-inner-right {
+  justify-content: flex-end;
+}
+
+.world-chapter-inner-center {
+  justify-content: center;
+}
+
+.world-copy {
+  max-width: min(43rem, 49vw);
+}
+
+.world-copy-intro {
+  align-self: flex-start;
+  margin-top: clamp(3rem, 10svh, 7rem);
+}
+
+.world-eyebrow {
+  color: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.world-copy h1 {
+  max-width: 11ch;
+  margin-top: 1.15rem;
+  font-family: var(--font-serif);
+  font-size: clamp(3.8rem, 6.1vw, 6.4rem);
+  font-weight: 600;
+  line-height: 0.93;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.world-lede {
+  max-width: 38rem;
+  margin-top: 1.35rem;
+  color: color-mix(in oklab, var(--foreground) 75%, transparent);
+  font-size: clamp(1rem, 1.25vw, 1.25rem);
+  line-height: 1.65;
+}
+
+.world-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.world-scroll-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 0.25rem;
+  color: color-mix(in oklab, var(--foreground) 74%, transparent);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: color 220ms ease, translate 220ms ease;
+}
+
+.world-scroll-hint:hover,
+.world-scroll-hint:focus-visible {
+  color: var(--foreground);
+  translate: 0 0.2rem;
+}
+
+.world-scroll-hint svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.world-paper-panel {
+  width: min(38rem, 48vw);
+  border: 1px solid color-mix(in oklab, var(--border) 68%, transparent);
+  border-radius: 1.6rem;
+  background: color-mix(in oklab, var(--card) 88%, transparent);
+  box-shadow: 0 1.5rem 4rem color-mix(in oklab, var(--foreground) 16%, transparent);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  backdrop-filter: blur(16px);
+}
+
+.world-paper-panel h2 {
+  max-width: 14ch;
+  margin-top: 0.7rem;
+  font-family: var(--font-serif);
+  font-size: clamp(2.25rem, 3.4vw, 4rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.world-paper-panel > p:not(.world-eyebrow) {
+  max-width: 34rem;
+  margin-top: 1rem;
+  color: color-mix(in oklab, var(--foreground) 72%, transparent);
+  line-height: 1.65;
+}
+
+.world-project-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.world-project-row {
+  display: grid;
+  grid-template-columns: auto 7rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+  padding: 0.65rem 0;
+  transition: translate 240ms ease, color 240ms ease;
+}
+
+.world-project-row:hover,
+.world-project-row:focus-visible {
+  color: var(--primary);
+  translate: 0.35rem 0;
+}
+
+.world-project-row img {
+  width: 7rem;
+  height: 4.5rem;
+  border-radius: 0.7rem;
+  object-fit: cover;
+}
+
+.world-project-index {
+  color: var(--primary);
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.world-project-row strong,
+.world-project-row small {
+  display: block;
+}
+
+.world-project-row strong {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+}
+
+.world-project-row small {
+  margin-top: 0.2rem;
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.world-project-row > svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.world-process-panel ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.world-process-panel li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.7rem;
+  border-top: 1px solid color-mix(in oklab, var(--border) 78%, transparent);
+  padding-top: 0.8rem;
+}
+
+.world-process-panel li > span {
+  grid-row: span 2;
+  color: var(--primary);
+  font-family: var(--font-serif);
+}
+
+.world-process-panel li > strong {
+  font-family: var(--font-serif);
+}
+
+.world-process-panel li > small {
+  margin-top: 0.15rem;
+  color: var(--muted-foreground);
+  line-height: 1.35;
+}
+
+.world-about-panel {
+  width: min(36rem, 46vw);
+}
+
+.world-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1.4rem;
+}
+
+.world-contact-panel {
+  width: min(44rem, 60vw);
+  text-align: center;
+}
+
+.world-contact-panel h2 {
+  max-width: none;
+  font-size: clamp(3rem, 5vw, 5.4rem);
+}
+
+.world-contact-panel > p:not(.world-eyebrow) {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.world-contact-panel .world-actions {
+  justify-content: center;
+}
+
+.world-progress {
+  position: absolute;
+  right: clamp(1.5rem, 5vw, 5rem);
+  bottom: clamp(1.25rem, 3svh, 2.5rem);
+  left: clamp(1.5rem, 5vw, 5rem);
+  z-index: 10;
+}
+
+.world-progress-track {
+  position: absolute;
+  top: 0.35rem;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: color-mix(in oklab, var(--foreground) 28%, transparent);
+}
+
+.world-progress-fill {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--foreground);
+  scale: 0 1;
+  transform-origin: left center;
+}
+
+.world-progress ol {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.world-progress li {
+  display: flex;
+}
+
+.world-progress li:nth-child(2),
+.world-progress li:nth-child(3),
+.world-progress li:nth-child(4) {
+  justify-content: center;
+}
+
+.world-progress li:last-child {
+  justify-content: flex-end;
+}
+
+.world-progress a {
+  display: inline-grid;
+  justify-items: center;
+  gap: 0.65rem;
+  color: color-mix(in oklab, var(--foreground) 58%, transparent);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: color 220ms ease;
+}
+
+.world-progress a > span {
+  width: 0.72rem;
+  height: 0.72rem;
+  border: 2px solid color-mix(in oklab, var(--foreground) 58%, transparent);
+  border-radius: 999px;
+  background: var(--background);
+  transition: border-color 220ms ease, background-color 220ms ease, scale 220ms ease;
+}
+
+.world-progress a:hover,
+.world-progress a:focus-visible,
+.world-progress a[data-active] {
+  color: var(--foreground);
+}
+
+.world-progress a[data-active] > span {
+  border-color: var(--foreground);
+  background: var(--foreground);
+  scale: 1.18;
+}
+
 @supports (min-height: 100dvh) {
   .viewport-section {
     min-height: 100dvh;
@@ -200,11 +630,152 @@ button {
   .process-steps {
     gap: 1rem;
   }
+
+  .world-copy-intro {
+    margin-top: 1.5rem;
+  }
+
+  .world-copy h1 {
+    font-size: clamp(3.2rem, 5.5vw, 5rem);
+  }
+
+  .world-lede {
+    margin-top: 0.9rem;
+  }
+
+  .world-actions {
+    margin-top: 1.15rem;
+  }
+
+  .world-paper-panel {
+    scale: 0.9;
+    transform-origin: right center;
+  }
 }
 
 @media (max-width: 767px) {
   .project-card:nth-child(n) .project-image-frame {
     rotate: 0deg;
+  }
+
+  .world-scroll {
+    height: auto;
+  }
+
+  .world-anchor,
+  .world-progress {
+    display: none;
+  }
+
+  .world-stage {
+    position: relative;
+    height: auto;
+    min-height: auto;
+    overflow: clip;
+  }
+
+  .world-visuals {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    margin-bottom: -100svh;
+  }
+
+  .world-layer-far {
+    object-position: 62% center;
+  }
+
+  .world-layer-middle,
+  .world-layer-foreground {
+    object-position: 65% bottom;
+  }
+
+  .world-layer-middle {
+    opacity: 0.72;
+  }
+
+  .world-layer-foreground {
+    opacity: 0.62;
+  }
+
+  .world-canvas {
+    opacity: 0.78;
+  }
+
+  .world-chapters {
+    position: relative;
+  }
+
+  .world-chapter,
+  .world-chapter:first-child {
+    position: relative;
+    inset: auto;
+    visibility: visible;
+    min-height: 100svh;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .world-chapter-inner {
+    min-height: 100svh;
+    align-items: flex-start;
+    padding-top: 7.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .world-chapter-inner-right,
+  .world-chapter-inner-center {
+    justify-content: flex-start;
+  }
+
+  .world-copy,
+  .world-paper-panel,
+  .world-about-panel,
+  .world-contact-panel {
+    width: 100%;
+    max-width: none;
+  }
+
+  .world-copy-intro {
+    margin-top: 0;
+  }
+
+  .world-copy h1 {
+    max-width: 9ch;
+    font-size: clamp(3.1rem, 15vw, 4.6rem);
+  }
+
+  .world-lede {
+    max-width: 30rem;
+    font-size: 1rem;
+  }
+
+  .world-paper-panel {
+    margin-top: 3rem;
+    background: color-mix(in oklab, var(--card) 94%, transparent);
+    backdrop-filter: blur(20px);
+  }
+
+  .world-project-row {
+    grid-template-columns: auto 4.5rem minmax(0, 1fr) auto;
+    gap: 0.65rem;
+  }
+
+  .world-project-row img {
+    width: 4.5rem;
+    height: 3.4rem;
+  }
+
+  .world-process-panel ol {
+    grid-template-columns: 1fr;
+  }
+
+  .world-contact-panel {
+    text-align: left;
+  }
+
+  .world-contact-panel .world-actions {
+    justify-content: flex-start;
   }
 }
 
