@@ -42,8 +42,9 @@ export const siteConfig = {
   world: {
     background: "/images/world/mekong-background.webp",
     midground: "/images/world/mekong-midground.webp",
-    foreground: "/images/world/mekong-foreground.webp",
+    foreground: "/images/world/mekong-foreground-clean.webp",
     characterModel: "/models/amas-walking.glb",
+    idleCharacterModel: "/models/amas-idle.glb",
     groundModel: "/models/mekong-path.glb",
     interactionHint: "Scroll to walk",
   },

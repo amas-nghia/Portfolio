@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 type WorldCanvasProps = {
   characterModel: string;
+  idleCharacterModel: string;
   groundModel: string;
 };
 
@@ -21,7 +22,11 @@ function disposeMaterial(material: import("three").Material) {
   material.dispose();
 }
 
-export function WorldCanvas({ characterModel, groundModel }: WorldCanvasProps) {
+export function WorldCanvas({
+  characterModel,
+  idleCharacterModel,
+  groundModel,
+}: WorldCanvasProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
@@ -38,7 +43,6 @@ export function WorldCanvas({ characterModel, groundModel }: WorldCanvasProps) {
           import("three"),
           import("three/examples/jsm/loaders/GLTFLoader.js"),
         ]);
-
         if (disposed || !mount) return;
 
         const scene = new THREE.Scene();
@@ -59,7 +63,6 @@ export function WorldCanvas({ characterModel, groundModel }: WorldCanvasProps) {
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.domElement.setAttribute("aria-hidden", "true");
         mount.appendChild(renderer.domElement);
-
         scene.add(new THREE.HemisphereLight(0xfff5dc, 0x496154, 2.2));
 
         const keyLight = new THREE.DirectionalLight(0xffd69c, 3.1);
@@ -75,11 +78,11 @@ export function WorldCanvas({ characterModel, groundModel }: WorldCanvasProps) {
         scene.add(fillLight);
 
         const loader = new GLTFLoader();
-        const [characterGltf, groundGltf] = await Promise.all([
+        const [characterGltf, idleGltf, groundGltf] = await Promise.all([
           loader.loadAsync(characterModel),
+          loader.loadAsync(idleCharacterModel),
           loader.loadAsync(groundModel),
         ]);
-
         if (disposed) return;
 
         const ground = groundGltf.scene;
@@ -95,8 +98,8 @@ export function WorldCanvas({ characterModel, groundModel }: WorldCanvasProps) {
 
         const characterRoot = new THREE.Group();
         const character = characterGltf.scene;
-        character.scale.setScalar(1.08);
-        character.rotation.y = Math.PI / 2;
+        character.scale.setScalar(0.82);
+        character.rotation.y = 0;
         character.traverse((object) => {
           if (!(object instanceof THREE.Mesh)) return;
           object.castShadow = true;
@@ -119,22 +122,66 @@ export function WorldCanvas({ characterModel, groundModel }: WorldCanvasProps) {
         const walkingClip = characterGltf.animations.find((clip) =>
           clip.name.toLowerCase().includes("walking"),
         ) ?? characterGltf.animations[0];
+        const idleClip = idleGltf.animations.find((clip) =>
+          clip.name.toLowerCase().includes("idle"),
+        ) ?? idleGltf.animations[0];
         const walkingAction = walkingClip ? mixer.clipAction(walkingClip) : null;
-        walkingAction?.play();
+        const idleAction = idleClip ? mixer.clipAction(idleClip) : null;
 
-        let progress = 0;
-        let targetProgress = 0;
+        walkingAction?.setEffectiveWeight(0).play();
+        idleAction?.setEffectiveWeight(1).play();
+
+        idleGltf.scene.traverse((object) => {
+          if (!(object instanceof THREE.Mesh)) return;
+          object.geometry.dispose();
+          if (Array.isArray(object.material)) {
+            object.material.forEach(disposeMaterial);
+          } else {
+            disposeMaterial(object.material);
+          }
+        });
+
+        const initialProgress = THREE.MathUtils.clamp(
+          Number(mount.closest<HTMLElement>("[data-world-scroll]")?.dataset.worldProgress) || 0,
+          0,
+          1,
+        );
+        let progress = initialProgress;
+        let targetProgress = initialProgress;
         let pointerX = 0;
-        let targetTimeScale = 0.12;
-        let lastProgress = 0;
+        let isMobile = false;
+        let motionState: "idle" | "walking" = "idle";
+        let facingDirection = 1;
+        let lastProgress = initialProgress;
         let movingUntil = 0;
         const clock = new THREE.Clock();
 
+        const setMotionState = (nextState: "idle" | "walking") => {
+          if (nextState === motionState) return;
+          motionState = nextState;
+
+          if (!walkingAction || !idleAction) {
+            if (walkingAction) walkingAction.timeScale = nextState === "walking" ? 1 : 0.08;
+            return;
+          }
+
+          if (nextState === "walking") {
+            walkingAction.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).play();
+            idleAction.crossFadeTo(walkingAction, 0.24, true);
+          } else {
+            idleAction.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).play();
+            walkingAction.crossFadeTo(idleAction, 0.28, true);
+          }
+        };
+
         const onProgress = (event: Event) => {
           const detail = (event as CustomEvent<ProgressDetail>).detail;
-          targetProgress = THREE.MathUtils.clamp(detail.progress, 0, 1);
-          if (Math.abs(targetProgress - lastProgress) > 0.0003) {
-            movingUntil = performance.now() + 180;
+          const nextProgress = THREE.MathUtils.clamp(detail.progress, 0, 1);
+          const direction = Math.sign(nextProgress - lastProgress);
+          if (direction !== 0) facingDirection = direction;
+          targetProgress = nextProgress;
+          if (Math.abs(targetProgress - lastProgress) > 0.00025) {
+            movingUntil = performance.now() + 260;
           }
           lastProgress = targetProgress;
         };
@@ -153,6 +200,7 @@ export function WorldCanvas({ characterModel, groundModel }: WorldCanvasProps) {
           renderer.setSize(clientWidth, clientHeight, false);
           camera.aspect = clientWidth / clientHeight;
           camera.updateProjectionMatrix();
+          isMobile = window.matchMedia("(max-width: 767px)").matches;
         };
 
         const observer = new ResizeObserver(resize);
@@ -163,25 +211,33 @@ export function WorldCanvas({ characterModel, groundModel }: WorldCanvasProps) {
           if (disposed) return;
           const delta = Math.min(clock.getDelta(), 0.05);
           progress = THREE.MathUtils.damp(progress, targetProgress, 7.5, delta);
-          const x = THREE.MathUtils.lerp(-1.65, 1.68, progress);
+          const moving =
+            performance.now() < movingUntil || Math.abs(targetProgress - progress) > 0.0008;
+          setMotionState(moving ? "walking" : "idle");
+
+          const x = isMobile ? 0 : THREE.MathUtils.lerp(-1.68, 1.82, progress);
           const y = -1.22 + Math.sin(progress * Math.PI) * 0.04;
           characterRoot.position.set(x, y, 0.02);
           shadow.position.x = x;
           shadow.position.z = 0.02;
+          ground.position.x = THREE.MathUtils.damp(
+            ground.position.x,
+            isMobile ? 0.15 - progress * 1.1 : 0.15,
+            6,
+            delta,
+          );
 
-          targetTimeScale = performance.now() < movingUntil ? 1.05 : 0.12;
-          if (walkingAction) {
-            walkingAction.timeScale = THREE.MathUtils.damp(
-              walkingAction.timeScale,
-              targetTimeScale,
-              8,
-              delta,
-            );
-          }
+          const targetRotation = moving
+            ? facingDirection >= 0
+              ? Math.PI / 2
+              : -Math.PI / 2
+            : isMobile
+              ? 0
+              : pointerX * 0.1;
           character.rotation.y = THREE.MathUtils.damp(
             character.rotation.y,
-            Math.PI / 2 + pointerX * 0.08,
-            5,
+            targetRotation,
+            moving ? 8 : 5,
             delta,
           );
 
@@ -222,7 +278,7 @@ export function WorldCanvas({ characterModel, groundModel }: WorldCanvasProps) {
       disposed = true;
       disposeScene();
     };
-  }, [characterModel, groundModel]);
+  }, [characterModel, groundModel, idleCharacterModel]);
 
   return (
     <div ref={mountRef} className="world-canvas" data-state={status}>

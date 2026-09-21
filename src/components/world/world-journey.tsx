@@ -1,5 +1,6 @@
 import { ArrowRight, ArrowUpRight, MouseSimple } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
+import type { CSSProperties } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +17,30 @@ const steps = [
   { label: "Process", href: "#process" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
+] as const;
+
+const milestones = [
+  {
+    label: "Projects",
+    image: "/images/world/milestone-projects.webp",
+    chapter: 1,
+    left: "36%",
+    bottom: "7.5%",
+  },
+  {
+    label: "Process",
+    image: "/images/world/milestone-process.webp",
+    chapter: 2,
+    left: "52%",
+    bottom: "13.5%",
+  },
+  {
+    label: "Contact",
+    image: "/images/world/milestone-contact.webp",
+    chapter: 4,
+    left: "80%",
+    bottom: "18%",
+  },
 ] as const;
 
 export function WorldJourney() {
@@ -35,35 +60,73 @@ export function WorldJourney() {
             alt=""
             fill
             priority
-            quality={88}
+            quality={72}
             sizes="100vw"
-            className="world-layer world-layer-far"
-            data-world-layer="far"
+            className="world-backdrop"
           />
-          <Image
-            src={world.midground}
-            alt=""
-            fill
-            priority
-            quality={88}
-            sizes="100vw"
-            className="world-layer world-layer-middle"
-            data-world-layer="middle"
-          />
-          <WorldCanvas
-            characterModel={world.characterModel}
-            groundModel={world.groundModel}
-          />
-          <Image
-            src={world.foreground}
-            alt=""
-            fill
-            priority
-            quality={88}
-            sizes="100vw"
-            className="world-layer world-layer-foreground"
-            data-world-layer="foreground"
-          />
+
+          <div className="world-artboard" data-world-artboard>
+            <Image
+              src={world.background}
+              alt=""
+              fill
+              priority
+              quality={88}
+              sizes="(max-aspect-ratio: 1672/941) 100vw, 178vh"
+              className="world-layer world-layer-far"
+              data-world-layer="far"
+            />
+            <Image
+              src={world.midground}
+              alt=""
+              fill
+              priority
+              quality={88}
+              sizes="(max-aspect-ratio: 1672/941) 100vw, 178vh"
+              className="world-layer world-layer-middle"
+              data-world-layer="middle"
+            />
+
+            <div className="world-milestones" data-world-milestones>
+              {milestones.map((milestone) => (
+                <div
+                  key={milestone.label}
+                  className="world-milestone"
+                  data-world-milestone={milestone.chapter}
+                  style={
+                    {
+                      "--milestone-x": milestone.left,
+                      "--milestone-bottom": milestone.bottom,
+                    } as CSSProperties
+                  }
+                >
+                  <Image
+                    src={milestone.image}
+                    alt=""
+                    width={340}
+                    height={412}
+                    sizes="(max-width: 767px) 10rem, 12rem"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <WorldCanvas
+              characterModel={world.characterModel}
+              idleCharacterModel={world.idleCharacterModel}
+              groundModel={world.groundModel}
+            />
+            <Image
+              src={world.foreground}
+              alt=""
+              fill
+              priority
+              quality={88}
+              sizes="(max-aspect-ratio: 1672/941) 100vw, 178vh"
+              className="world-layer world-layer-foreground"
+              data-world-layer="foreground"
+            />
+          </div>
         </div>
 
         <div className="world-chapters">

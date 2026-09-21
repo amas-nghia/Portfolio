@@ -25,6 +25,8 @@ export function WorldMotion() {
         const far = worldRoot.querySelector<HTMLElement>("[data-world-layer='far']");
         const middle = worldRoot.querySelector<HTMLElement>("[data-world-layer='middle']");
         const foreground = worldRoot.querySelector<HTMLElement>("[data-world-layer='foreground']");
+        const milestoneLayer = worldRoot.querySelector<HTMLElement>("[data-world-milestones]");
+        const milestones = gsap.utils.toArray<HTMLElement>("[data-world-milestone]");
         const progressFill = worldRoot.querySelector<HTMLElement>("[data-world-progress-fill]");
         let activeIndex = -1;
 
@@ -47,11 +49,42 @@ export function WorldMotion() {
             if (itemIndex === index) item.setAttribute("aria-current", "step");
             else item.removeAttribute("aria-current");
           });
+          milestones.forEach((milestone) => {
+            const milestoneChapter = Number(milestone.dataset.worldMilestone);
+            milestone.toggleAttribute("data-active", milestoneChapter === index);
+            milestone.toggleAttribute("data-passed", milestoneChapter < index);
+          });
+        };
+
+        const getChapterIndex = (progress: number) => {
+          if (progress < 0.18) return 0;
+          if (progress < 0.39) return 1;
+          if (progress < 0.64) return 2;
+          if (progress < 0.84) return 3;
+          return 4;
+        };
+
+        const updateWorld = (progress: number, mobile: boolean) => {
+          worldRoot.dataset.worldProgress = String(progress);
+          setChapter(getChapterIndex(progress));
+          if (far) gsap.set(far, { xPercent: 0 });
+          if (middle) gsap.set(middle, { xPercent: 0 });
+          if (foreground) gsap.set(foreground, { xPercent: 0 });
+          if (milestoneLayer) {
+            gsap.set(milestoneLayer, {
+              xPercent: mobile ? 30 - progress * 60 : 0,
+            });
+          }
+          if (progressFill) gsap.set(progressFill, { scaleX: progress });
+          window.dispatchEvent(
+            new CustomEvent("amas:world-progress", { detail: { progress } }),
+          );
         };
 
         const media = gsap.matchMedia();
         media.add("(min-width: 768px)", () => {
           gsap.set(chapters, { autoAlpha: 0, y: 24 });
+          activeIndex = -1;
           setChapter(0, true);
 
           const trigger = ScrollTrigger.create({
@@ -60,29 +93,29 @@ export function WorldMotion() {
             end: "bottom bottom",
             scrub: true,
             onUpdate: ({ progress }) => {
-              const chapterIndex = Math.min(
-                chapters.length - 1,
-                Math.floor(progress * chapters.length),
-              );
-              setChapter(chapterIndex);
-              if (far) gsap.set(far, { xPercent: progress * -1.5 });
-              if (middle) gsap.set(middle, { xPercent: progress * -4.5 });
-              if (foreground) gsap.set(foreground, { xPercent: progress * -7 });
-              if (progressFill) gsap.set(progressFill, { scaleX: progress });
-              window.dispatchEvent(
-                new CustomEvent("amas:world-progress", { detail: { progress } }),
-              );
+              updateWorld(progress, false);
             },
           });
+          updateWorld(trigger.progress, false);
 
           return () => trigger.kill();
         });
 
         media.add("(max-width: 767px)", () => {
-          gsap.set(chapters, { clearProps: "all" });
-          window.dispatchEvent(
-            new CustomEvent("amas:world-progress", { detail: { progress: 0.12 } }),
-          );
+          gsap.set(chapters, { autoAlpha: 0, y: 14 });
+          activeIndex = -1;
+          setChapter(0, true);
+
+          const trigger = ScrollTrigger.create({
+            trigger: worldRoot,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
+            onUpdate: ({ progress }) => updateWorld(progress, true),
+          });
+          updateWorld(trigger.progress, true);
+
+          return () => trigger.kill();
         });
 
         cleanup = () => media.revert();
