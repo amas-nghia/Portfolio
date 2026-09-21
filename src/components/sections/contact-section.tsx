@@ -11,18 +11,19 @@ export function ContactSection() {
   const { contact } = siteConfig;
 
   return (
-    <footer id="contact" className="contact-section relative scroll-mt-20 overflow-hidden text-cream">
+    <footer id="contact" data-gsap-section="contact" className="contact-section viewport-section relative scroll-mt-20 overflow-hidden text-cream">
       <Image
         src={contact.background}
         alt=""
         fill
         sizes="100vw"
-        loading="eager"
+        loading="lazy"
+        quality={82}
         className="object-cover object-center"
       />
       <div className="contact-overlay absolute inset-0" aria-hidden="true" />
 
-      <Container className="relative z-10 flex min-h-[600px] flex-col justify-between py-16 sm:py-20">
+      <Container className="relative z-10 flex min-h-[100svh] flex-col justify-between py-[clamp(4rem,9svh,6.5rem)]">
         <Reveal className="max-w-2xl">
           <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-cream/70">{contact.eyebrow}</p>
           <h2 className="mt-5 font-serif text-5xl font-semibold leading-[0.98] tracking-[-0.04em] sm:text-6xl">
@@ -30,13 +31,13 @@ export function ContactSection() {
           </h2>
           <p className="mt-6 max-w-xl text-base leading-7 text-cream/72 sm:text-lg">{contact.description}</p>
           <div className="mt-9 flex flex-col gap-4 sm:flex-row">
-            <Button asChild size="lg" variant="night">
+            <Button asChild size="lg" variant="night" data-magnetic>
               <a href={contact.primaryAction.href} target="_blank" rel="noreferrer">
                 {contact.primaryAction.label}
                 <ArrowUpRight weight="bold" />
               </a>
             </Button>
-            <Button asChild size="lg" variant="ghost" className="text-cream hover:bg-cream/10 hover:text-cream">
+            <Button asChild size="lg" variant="nightOutline" data-magnetic>
               <a href={contact.secondaryAction.href} target="_blank" rel="noreferrer">
                 {contact.secondaryAction.label}
                 <ArrowUpRight weight="bold" />

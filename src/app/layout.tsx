@@ -6,24 +6,51 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { siteConfig } from "@/config/site";
+import { getSiteUrl } from "@/lib/site-url";
 
 import "./globals.css";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000");
+const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: `${siteConfig.name} — ${siteConfig.role}`,
+  title: {
+    default: `${siteConfig.name} — ${siteConfig.role}`,
+    template: `%s | ${siteConfig.name}`,
+  },
   description: siteConfig.description,
   metadataBase: new URL(siteUrl),
+  applicationName: `${siteConfig.name} Portfolio`,
+  keywords: [...siteConfig.seo.keywords],
+  authors: [{ name: siteConfig.name, url: siteUrl }],
+  creator: siteConfig.name,
+  category: "technology",
+  alternates: { canonical: "/" },
   openGraph: {
     title: `${siteConfig.name} — ${siteConfig.role}`,
     description: siteConfig.description,
     type: "website",
-    images: ["/images/project-mobile-puzzle.webp"],
+    url: "/",
+    siteName: `${siteConfig.name} Portfolio`,
+    locale: siteConfig.seo.locale,
+    images: [
+      {
+        url: siteConfig.seo.openGraphImage,
+        width: 1200,
+        height: 900,
+        alt: siteConfig.seo.openGraphImageAlt,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteConfig.name} — ${siteConfig.role}`,
+    description: siteConfig.description,
+    images: [siteConfig.seo.openGraphImage],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
 };
 

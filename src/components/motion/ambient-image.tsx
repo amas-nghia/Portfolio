@@ -1,6 +1,3 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
@@ -15,23 +12,22 @@ type AmbientImageProps = {
 };
 
 export function AmbientImage({ src, alt, width, height, className, priority }: AmbientImageProps) {
-  const reduceMotion = useReducedMotion();
-
   return (
-    <motion.div
-      className={cn("will-change-transform", className)}
-      animate={reduceMotion ? undefined : { y: [0, -8, 0], rotate: [0, 0.3, 0] }}
-      transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-    >
-      <Image
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        priority={priority}
-        loading={priority ? undefined : "eager"}
-        className="h-auto w-full"
-      />
-    </motion.div>
+    <div className={cn(className)} data-gsap="image">
+      <div data-gsap-float>
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          priority={priority}
+          loading={priority ? undefined : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          quality={85}
+          sizes="(max-width: 1023px) 100vw, 50vw"
+          className="h-auto w-full"
+        />
+      </div>
+    </div>
   );
 }

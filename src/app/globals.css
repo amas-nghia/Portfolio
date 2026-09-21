@@ -90,8 +90,14 @@ button {
   -webkit-tap-highlight-color: transparent;
 }
 
+.viewport-section {
+  display: grid;
+  min-height: 100svh;
+  align-items: center;
+}
+
 .section-pad {
-  padding-block: clamp(5rem, 9vw, 8.5rem);
+  padding-block: clamp(3.5rem, 8svh, 7rem);
 }
 
 .hero-section {
@@ -114,6 +120,30 @@ button {
   background-color: var(--card);
 }
 
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.45rem;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: currentColor;
+  scale: 0 1;
+  transform-origin: right center;
+  transition: scale 240ms ease, transform-origin 0ms 240ms;
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after {
+  scale: 1 1;
+  transform-origin: left center;
+  transition: scale 240ms ease;
+}
+
 .contact-section {
   background-color: var(--night);
 }
@@ -122,9 +152,53 @@ button {
   background-color: color-mix(in oklab, var(--night) 38%, transparent);
 }
 
-@media (max-width: 1023px) {
-  .hero-section [class*="min-h-"] {
-    min-height: auto;
+@supports (min-height: 100dvh) {
+  .viewport-section {
+    min-height: 100dvh;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 820px) {
+  .section-pad {
+    padding-block: 2.25rem;
+  }
+
+  .hero-section > div {
+    padding-block: 2rem;
+  }
+
+  .work-grid {
+    margin-top: 1.5rem;
+  }
+
+  .project-image-frame {
+    height: clamp(11.5rem, 26svh, 13.5rem);
+  }
+
+  .project-label {
+    padding: 0.875rem 1rem;
+  }
+
+  .project-description {
+    margin-top: 0.5rem;
+    line-height: 1.35rem;
+  }
+
+  .project-tags,
+  .project-action {
+    margin-top: 0.625rem;
+  }
+
+  .process-illustration {
+    margin-top: 1.25rem;
+  }
+
+  .process-illustration img {
+    max-height: 27svh;
+  }
+
+  .process-steps {
+    gap: 1rem;
   }
 }
 
@@ -146,5 +220,14 @@ button {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  [data-gsap],
+  [data-gsap-float] {
+    opacity: 1 !important;
+    translate: none !important;
+    rotate: none !important;
+    scale: 1 !important;
+    transform: none !important;
   }
 }

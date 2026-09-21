@@ -7,6 +7,19 @@ export const siteConfig = {
   role: "Freelance Unity Developer",
   description:
     "Unity and C# game developer focused on clear mechanics, mobile puzzle games and shareable WebGL prototypes.",
+  seo: {
+    locale: "en_US",
+    keywords: [
+      "Unity developer",
+      "C# game developer",
+      "mobile puzzle game developer",
+      "Unity WebGL developer",
+      "game prototyping",
+      "freelance game developer",
+    ],
+    openGraphImage: "/images/project-mobile-puzzle.webp",
+    openGraphImageAlt: "Colorful Unity mobile puzzle prototype by AMAS",
+  },
   nav: [
     { label: "Work", href: "#work" },
     { label: "Process", href: "#process" },

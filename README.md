@@ -1,6 +1,6 @@
 # AMAS Unity Portfolio
 
-A cozy, animated portfolio built with Next.js App Router, TypeScript, Tailwind CSS v4 and shadcn-style design tokens.
+A cozy, animated portfolio built with Next.js App Router, TypeScript, Tailwind CSS v4, GSAP and shadcn-style design tokens.
 
 ## Edit content
 
@@ -17,6 +17,8 @@ src/app/globals.css
 ```
 
 Illustrations live in `public/images`. Replace an image while keeping its filename to update the art without touching a component.
+
+SEO keywords, social preview copy and editable portfolio content are centralized in `src/config/site.ts`. Set `NEXT_PUBLIC_SITE_URL` when using a custom production domain; Vercel's production URL is detected automatically otherwise.
 
 ## Components
 
@@ -40,3 +42,5 @@ npm run typecheck
 npm run lint
 npm run build
 ```
+
+The production build statically renders the portfolio, JSON-LD profile data, `robots.txt` and `sitemap.xml`. GSAP is loaded after hydration by one small client island so the visible content remains server-rendered and crawlable.

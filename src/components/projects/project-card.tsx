@@ -12,9 +12,13 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
   return (
-    <article className={cn("project-card group", index === 1 && "lg:translate-y-8")}>
+    <article
+      data-gsap="project"
+      data-gsap-delay={index * 0.06}
+      className={cn("project-card group", index === 1 && "lg:translate-y-5 xl:translate-y-7")}
+    >
       <a href={project.href} target="_blank" rel="noreferrer" className="block focus-visible:outline-none">
-        <div className="project-image-frame relative aspect-[4/3] overflow-hidden rounded-[calc(var(--radius)*1.5)] border border-border/80 bg-card shadow-[0_18px_48px_color-mix(in_oklab,var(--paper-shadow)_24%,transparent)] transition duration-500 group-hover:-translate-y-2 group-hover:rotate-0 group-hover:shadow-[0_28px_62px_color-mix(in_oklab,var(--paper-shadow)_34%,transparent)] group-focus-within:ring-2 group-focus-within:ring-ring">
+        <div className="project-image-frame relative h-[clamp(13rem,30svh,19rem)] overflow-hidden rounded-[calc(var(--radius)*1.5)] border border-border/80 bg-card shadow-[0_18px_48px_color-mix(in_oklab,var(--paper-shadow)_24%,transparent)] transition duration-500 group-hover:-translate-y-2 group-hover:rotate-0 group-hover:shadow-[0_28px_62px_color-mix(in_oklab,var(--paper-shadow)_34%,transparent)] group-focus-within:ring-2 group-focus-within:ring-ring">
           <Image
             src={project.image}
             alt={`Illustrated concept for ${project.title}`}
@@ -35,15 +39,15 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             </div>
             <ArrowUpRight className="mt-1 size-5 shrink-0" weight="bold" aria-hidden="true" />
           </div>
-          <p className="mt-3 text-sm leading-6 text-muted-foreground">{project.description}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
+          <p className="project-description mt-3 text-sm leading-6 text-muted-foreground">{project.description}</p>
+          <div className="project-tags mt-4 flex flex-wrap gap-2">
             {project.tags.map((tag) => (
               <Badge key={tag} className="bg-background/80">
                 {tag}
               </Badge>
             ))}
           </div>
-          <span className="mt-4 inline-flex text-xs font-extrabold uppercase tracking-[0.16em] text-foreground">
+          <span className="project-action mt-4 inline-flex text-xs font-extrabold uppercase tracking-[0.16em] text-foreground">
             {project.action}
           </span>
         </div>

@@ -9,6 +9,7 @@ export function Badge({ className, ...props }: HTMLAttributes<HTMLSpanElement>) 
         "inline-flex items-center rounded-full border border-border bg-secondary px-3 py-1 text-xs font-bold tracking-wide text-secondary-foreground",
         className,
       )}
+      data-gsap="chip"
       {...props}
     />
   );

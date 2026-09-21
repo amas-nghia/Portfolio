@@ -27,16 +27,16 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
-        <a href="#top" aria-label="AMAS home" onClick={() => setOpen(false)}>
+        <a href="#top" aria-label="AMAS home" data-gsap="reveal" onClick={() => setOpen(false)}>
           <Logo />
         </a>
 
-        <nav aria-label="Primary navigation" className="hidden items-center gap-8 md:flex">
+        <nav aria-label="Primary navigation" data-gsap="reveal" data-gsap-delay="0.08" className="hidden items-center gap-8 md:flex">
           {siteConfig.nav.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="text-xs font-extrabold uppercase tracking-[0.18em] text-foreground/75 transition-colors hover:text-foreground"
+              className="nav-link text-xs font-extrabold uppercase tracking-[0.18em] text-foreground/75 transition-colors hover:text-foreground"
             >
               {item.label}
             </a>

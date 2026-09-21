@@ -5,17 +5,20 @@ import type { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-extrabold tracking-[0.08em] uppercase transition-[transform,box-shadow,background-color,color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
+  "group/button inline-flex translate-y-0 items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-extrabold tracking-[0.08em] uppercase shadow-none transition-[translate,scale,box-shadow,background-color,color] duration-300 ease-out hover:-translate-y-1 active:translate-y-0.5 active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 disabled:hover:translate-y-0 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-300 group-hover/button:[&_svg]:translate-x-0.5 group-hover/button:[&_svg]:-translate-y-0.5",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-[0_8px_0_var(--button-shadow)] hover:-translate-y-1 hover:shadow-[0_12px_0_var(--button-shadow)] active:translate-y-1 active:shadow-[0_4px_0_var(--button-shadow)]",
+          "bg-primary text-primary-foreground hover:shadow-[0_8px_0_var(--button-shadow)] active:shadow-[0_3px_0_var(--button-shadow)]",
         outline:
-          "border-2 border-foreground/70 bg-background/75 text-foreground hover:-translate-y-1 hover:bg-card hover:shadow-[0_8px_0_var(--paper-shadow)]",
-        ghost: "text-foreground hover:bg-accent hover:text-accent-foreground",
+          "border-2 border-foreground/70 bg-background/75 text-foreground hover:bg-card hover:shadow-[0_8px_0_var(--paper-shadow)] active:shadow-[0_3px_0_var(--paper-shadow)]",
+        ghost:
+          "text-foreground hover:bg-accent hover:text-accent-foreground hover:shadow-[0_7px_0_color-mix(in_oklab,var(--paper-shadow)_60%,transparent)]",
         night:
-          "bg-cream text-night shadow-[0_8px_0_var(--night-shadow)] hover:-translate-y-1 hover:bg-white",
+          "bg-cream text-night hover:bg-white hover:shadow-[0_8px_0_var(--night-shadow)] active:shadow-[0_3px_0_var(--night-shadow)]",
+        nightOutline:
+          "border-2 border-cream/65 bg-night/35 text-cream hover:border-cream hover:bg-night/55 hover:shadow-[0_8px_0_var(--night-shadow)] active:shadow-[0_3px_0_var(--night-shadow)]",
       },
       size: {
         sm: "h-10 px-5 text-xs",

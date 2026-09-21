@@ -17,17 +17,30 @@
 
 ## Responsive and interaction checks
 
-- Desktop navigation and fixed header remain readable over the hero
+- Every desktop section resolves to exactly one viewport at 1363 × 936 and 1280 × 720
+- Short laptop screens use compact spacing and fluid media heights without clipping section content
+- Mobile sections keep a `100svh` minimum but grow naturally when their content needs more room
 - Mobile layout has no horizontal overflow at 390 × 844
 - Mobile navigation opens and exposes all four section links
+- Buttons share the same flat resting state, lift on hover and press down on activation
+- GSAP reveal, stagger, floating-image and magnetic-button motion is progressively enhanced after hydration
+- Reduced-motion preferences disable the animation layer and leave every element visible
 - Primary CTA, itch.io demos, repository and live virtual-tour links are represented by semantic anchors
 - Generated illustrations render from local optimized WebP assets
+
+## Rendering, performance and SEO
+
+- Page content remains statically rendered from Server Components; the GSAP controller is a renderless client island
+- GSAP is loaded dynamically only after hydration
+- Non-critical images are lazy-loaded with responsive `sizes`; the hero stays prioritized
+- Canonical metadata, Open Graph, Twitter card, JSON-LD, `robots.txt` and `sitemap.xml` are generated from shared configuration
+- TypeScript, ESLint and the production Next.js build pass
 
 ## Accepted differences
 
 - Hero headline wraps to three lines instead of two at the QA viewport so the copy remains legible beside the illustration
 - Copy and project titles use only verifiable portfolio information rather than the placeholder wording in the concept image
-- Full-page height is longer than the concept because the implementation preserves readable project descriptions and responsive spacing
+- On narrow mobile screens, content-heavy sections may exceed one viewport so text and controls never clip
 
 ## Result
 
