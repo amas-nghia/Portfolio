@@ -21,3 +21,6 @@ pnpm-debug.log*
 
 # TypeScript
 *.tsbuildinfo
+
+# local design-reference files used during visual QA
+/design/reference-scroll-world.png
